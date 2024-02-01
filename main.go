@@ -34,13 +34,23 @@ func CreateRestaurants(w http.ResponseWriter, r *http.Request) {
 	restaurants = append(restaurants, person)
 	json.NewEncoder(w).Encode(restaurants)
 }
+func EditRestaurants(w http.ResponseWriter, r *http.Request){
+          params := mux.Vars(r)
+	 for index, item := range restaurants {
 
+		 if item.ID == params["id"]{
+			 item.Name=params["name"];
+		 }
+	 }
+
+	
+}
 func DeleteRestaurants(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	for index, item := range restaurants {
 		if item.ID == params["id"] {
 			restaurants = append(restaurants[:index], restaurants[index+1:]...)
-			break
+			break;
 		}
 		json.NewEncoder(w).Encode(restaurants)
 	}
@@ -71,6 +81,7 @@ func main() {
 	router.HandleFunc("/restaurants", GetRestaurants).Methods("GET")
 	router.HandleFunc("/restaurants/{id}", GetSingleRestaurant).Methods("GET")
 	router.HandleFunc("/restaurants/{id}", CreateRestaurants).Methods("POST")
+	router.HandleFunc("/restaurants/{id}",EditRestaurants).Methods("PUT")
 	router.HandleFunc("/restaurants/{id}", DeleteRestaurants).Methods("DELETE")
 	//http.ListenAndServe(":4646", router)
 
